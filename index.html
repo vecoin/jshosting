@@ -3,13 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Test</title>
+    <title>Welcome to Our Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+        }
+        .main-content {
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+        }
+        .cta-button {
+            display: block;
+            width: 200px;
+            height: 50px;
+            background: #e8491d;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            line-height: 50px;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+    </style>
+
+
+<script type="text/javascript">
+  (function(d, t) {
+    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+    v.onload = function() {
+      if (!document.getElementById('root')) {
+        var root = d.createElement('div');
+        root.id = 'root';
+        d.body.appendChild(root);
+      }
+      if (window.myChatWidget && typeof window.myChatWidget.load === 'function') {
+        window.myChatWidget.load({
+          id: '416d1e54-2276-49d8-a803-f3bf5c881802',
+        });
+      }
+    };
+    v.src = "https://luciano234.github.io/jshosting/chatbot.js";
+    v.type = "text/javascript";
+    s.parentNode.insertBefore(v, s);
+  })(document, 'script');
+</script>
+    
+
+
 </head>
 <body>
-    <h1>Welcome to the Chatbot Test Page!</h1>
-    <p>Check the console for chatbot messages.</p>
+    <header>
+        <div class="container">
+            <h1>Welcome to Our Amazing Product</h1>
+        </div>
+    </header>
 
-    <!-- Load your JavaScript file -->
-    <script src="chatbot.js"></script>
+    <div class="container">
+        <section class="main-content">
+            <h2>Discover the Power of Innovation</h2>
+            <p>Our product is designed to revolutionize the way you work, play, and live. With cutting-edge technology and user-friendly features, you'll wonder how you ever lived without it.</p>
+            <a href="#" class="cta-button">Learn More</a>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Your Company Name. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
 </body>
 </html>
