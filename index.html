@@ -1,146 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Our Landing Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
-        }
-        header {
-            background: #50b3a2;
-            color: white;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #e8491d 3px solid;
-        }
-        header h1 {
-            margin: 0;
-            text-align: center;
-        }
-        .main-content {
-            padding: 20px;
-            background: white;
-            margin-top: 20px;
-        }
-        .cta-button {
-            display: block;
-            width: 200px;
-            height: 50px;
-            background: #e8491d;
-            color: white;
-            text-decoration: none;
-            text-align: center;
-            line-height: 50px;
-            margin: 20px auto;
-            border-radius: 5px;
-        }
-    </style>
+function startChatbot() {
+    console.log("Chatbot initialized...");
 
+    // Function to send messages to Make.com Webhook
+    async function sendMessage(message) {
+        console.log("User:", message);
 
-<script src="https://luciano234.github.io/jshosting/chatbot.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        if (typeof startChatbot === "function") {
-            const chatbot = startChatbot();
-            chatbot.sendMessage("Hello, Make.com!");
+        try {
+            const response = await fetch("https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah", {  
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text: message })  
+            });
 
-            // Create a basic chat window UI
-            let chatContainer = document.createElement("div");
-            chatContainer.style.position = "fixed";
-            chatContainer.style.bottom = "20px";
-            chatContainer.style.right = "20px";
-            chatContainer.style.width = "300px";
-            chatContainer.style.height = "400px";
-            chatContainer.style.background = "#fff";
-            chatContainer.style.border = "1px solid #ccc";
-            chatContainer.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
-            chatContainer.style.padding = "10px";
-            chatContainer.style.overflowY = "auto";
-            chatContainer.style.display = "flex";
-            chatContainer.style.flexDirection = "column";
-            chatContainer.style.alignItems = "center";
-            
-            let chatHeader = document.createElement("div");
-            chatHeader.innerText = "Chatbot";
-            chatHeader.style.background = "#50b3a2";
-            chatHeader.style.color = "#fff";
-            chatHeader.style.width = "100%";
-            chatHeader.style.textAlign = "center";
-            chatHeader.style.padding = "10px";
-            chatContainer.appendChild(chatHeader);
+            // ✅ Handle plain text & JSON responses
+            const contentType = response.headers.get("Content-Type");
+            let data;
+            if (contentType && contentType.includes("application/json")) {
+                data = await response.json();
+            } else {
+                data = await response.text();  // Read plain text response
+            }
 
-            let chatMessages = document.createElement("div");
-            chatMessages.style.flexGrow = "1";
-            chatMessages.style.width = "100%";
-            chatMessages.style.overflowY = "auto";
-            chatContainer.appendChild(chatMessages);
+            console.log("Make.com Response:", data);
+            addMessage("Bot", data); // Display bot response in chat
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
+    }
 
-            let chatInput = document.createElement("input");
-            chatInput.type = "text";
-            chatInput.placeholder = "Type a message...";
-            chatInput.style.width = "90%";
-            chatInput.style.margin = "5px";
-            chatContainer.appendChild(chatInput);
+    // Create Chat UI
+    function createChatUI() {
+        let chatContainer = document.createElement("div");
+        chatContainer.style.position = "fixed";
+        chatContainer.style.bottom = "20px";
+        chatContainer.style.right = "20px";
+        chatContainer.style.width = "300px";
+        chatContainer.style.height = "400px";
+        chatContainer.style.background = "#fff";
+        chatContainer.style.border = "1px solid #ccc";
+        chatContainer.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
+        chatContainer.style.padding = "10px";
+        chatContainer.style.overflowY = "auto";
+        chatContainer.style.display = "flex";
+        chatContainer.style.flexDirection = "column";
+        chatContainer.style.alignItems = "center";
 
-            let chatButton = document.createElement("button");
-            chatButton.innerText = "Send";
-            chatButton.onclick = function () {
+        let chatHeader = document.createElement("div");
+        chatHeader.innerText = "Chatbot";
+        chatHeader.style.background = "#50b3a2";
+        chatHeader.style.color = "#fff";
+        chatHeader.style.width = "100%";
+        chatHeader.style.textAlign = "center";
+        chatHeader.style.padding = "10px";
+        chatContainer.appendChild(chatHeader);
+
+        let chatMessages = document.createElement("div");
+        chatMessages.style.flexGrow = "1";
+        chatMessages.style.width = "100%";
+        chatMessages.style.overflowY = "auto";
+        chatMessages.style.padding = "10px";
+        chatMessages.id = "chatMessages";
+        chatContainer.appendChild(chatMessages);
+
+        let chatInput = document.createElement("input");
+        chatInput.type = "text";
+        chatInput.placeholder = "Type a message...";
+        chatInput.style.width = "90%";
+        chatInput.style.margin = "5px";
+        chatInput.style.padding = "8px";
+        chatInput.style.border = "1px solid #ccc";
+        chatInput.style.borderRadius = "5px";
+        chatInput.style.outline = "none";
+
+        chatInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter" && chatInput.value.trim() !== "") {
                 let userMessage = chatInput.value.trim();
-                if (userMessage) {
-                    chatbot.sendMessage(userMessage);
-                    let msgDiv = document.createElement("div");
-                    msgDiv.innerText = "You: " + userMessage;
-                    chatMessages.appendChild(msgDiv);
-                    chatInput.value = "";
-                }
-            };
-            chatContainer.appendChild(chatButton);
+                addMessage("You", userMessage);
+                sendMessage(userMessage);
+                chatInput.value = "";
+            }
+        });
 
-            document.body.appendChild(chatContainer);
-        } else {
-            console.error("Chatbot script did not load.");
-        }
-    });
-</script>
+        chatContainer.appendChild(chatInput);
+        document.body.appendChild(chatContainer);
+    }
 
-    
+    // Function to add messages to chat
+    function addMessage(sender, message) {
+        let chatMessages = document.getElementById("chatMessages");
+        if (!chatMessages) return;
 
+        let msgDiv = document.createElement("div");
+        msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+        msgDiv.style.marginBottom = "10px";
+        chatMessages.appendChild(msgDiv);
 
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Welcome to Our Amazing Product</h1>
-        </div>
-    </header>
+        // Auto-scroll to the latest message
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-    <div class="container">
-        <section class="main-content">
-            <h2>Discover the Power of Innovation</h2>
-            <p>Our product is designed to revolutionize the way you work, play, and live. With cutting-edge technology and user-friendly features, you'll wonder how you ever lived without it.</p>
-            <a href="#" class="cta-button">Learn More</a>
-        </section>
-    </div>
+    createChatUI();
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Your Company Name. All rights reserved.</p>
-        </div>
-    </footer>
+    return { sendMessage };
+}
 
+// Start the chatbot when the page loads
+document.addEventListener("DOMContentLoaded", startChatbot);
 
-
-</body>
-</html>
