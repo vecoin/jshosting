@@ -49,26 +49,72 @@
     </style>
 
 
-<script type="text/javascript">
-  (function(d, t) {
-    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    v.onload = function() {
-      if (!document.getElementById('root')) {
-        var root = d.createElement('div');
-        root.id = 'root';
-        d.body.appendChild(root);
-      }
-      if (window.myChatWidget && typeof window.myChatWidget.load === 'function') {
-        window.myChatWidget.load({
-          id: '416d1e54-2276-49d8-a803-f3bf5c881802',
-        });
-      }
-    };
-    v.src = "https://luciano234.github.io/jshosting/chatbot.js";
-    v.type = "text/javascript";
-    s.parentNode.insertBefore(v, s);
-  })(document, 'script');
+<script src="https://luciano234.github.io/jshosting/chatbot.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof startChatbot === "function") {
+            const chatbot = startChatbot();
+            chatbot.sendMessage("Hello, Make.com!");
+
+            // Create a basic chat window UI
+            let chatContainer = document.createElement("div");
+            chatContainer.style.position = "fixed";
+            chatContainer.style.bottom = "20px";
+            chatContainer.style.right = "20px";
+            chatContainer.style.width = "300px";
+            chatContainer.style.height = "400px";
+            chatContainer.style.background = "#fff";
+            chatContainer.style.border = "1px solid #ccc";
+            chatContainer.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
+            chatContainer.style.padding = "10px";
+            chatContainer.style.overflowY = "auto";
+            chatContainer.style.display = "flex";
+            chatContainer.style.flexDirection = "column";
+            chatContainer.style.alignItems = "center";
+            
+            let chatHeader = document.createElement("div");
+            chatHeader.innerText = "Chatbot";
+            chatHeader.style.background = "#50b3a2";
+            chatHeader.style.color = "#fff";
+            chatHeader.style.width = "100%";
+            chatHeader.style.textAlign = "center";
+            chatHeader.style.padding = "10px";
+            chatContainer.appendChild(chatHeader);
+
+            let chatMessages = document.createElement("div");
+            chatMessages.style.flexGrow = "1";
+            chatMessages.style.width = "100%";
+            chatMessages.style.overflowY = "auto";
+            chatContainer.appendChild(chatMessages);
+
+            let chatInput = document.createElement("input");
+            chatInput.type = "text";
+            chatInput.placeholder = "Type a message...";
+            chatInput.style.width = "90%";
+            chatInput.style.margin = "5px";
+            chatContainer.appendChild(chatInput);
+
+            let chatButton = document.createElement("button");
+            chatButton.innerText = "Send";
+            chatButton.onclick = function () {
+                let userMessage = chatInput.value.trim();
+                if (userMessage) {
+                    chatbot.sendMessage(userMessage);
+                    let msgDiv = document.createElement("div");
+                    msgDiv.innerText = "You: " + userMessage;
+                    chatMessages.appendChild(msgDiv);
+                    chatInput.value = "";
+                }
+            };
+            chatContainer.appendChild(chatButton);
+
+            document.body.appendChild(chatContainer);
+        } else {
+            console.error("Chatbot script did not load.");
+        }
+    });
 </script>
+
     
 
 
