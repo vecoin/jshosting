@@ -1,7 +1,7 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; 
-    const CHATBOT_NAME = "Blicky";  
-    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpgg";  
+    const CHATBOT_NAME = "Blickbot Assitant";  
+    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpg";  
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -106,6 +106,8 @@
             background: #f9f9f9;
             display: flex;
             flex-direction: column;
+            height: 100%;
+            max-height: 350px;
         }
         .chat-message {
             padding: 8px;
@@ -126,13 +128,13 @@
         }
         #chatbot-input-wrapper {
             background: white;
-            border-top: 1px solid #ddd;
             padding: 10px;
             display: flex;
-            position: relative;
+            position: sticky;
             bottom: 0;
             width: 100%;
             box-sizing: border-box;
+            border-top: 1px solid #ddd;
         }
         #chatbot-input {
             flex: 1;
@@ -146,7 +148,7 @@
 
     // Toggle chatbot visibility
     chatBubble.addEventListener("click", function() {
-        chatContainer.style.display = "block";
+        chatContainer.style.display = "flex";
         inputField.focus();
     });
 
@@ -176,6 +178,7 @@
         messageDiv.className = "chat-message " + sender;
         messageDiv.textContent = message;
         chatArea.appendChild(messageDiv);
+        scrollToBottom();
     }
 
     // Scroll to latest message
