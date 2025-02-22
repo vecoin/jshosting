@@ -1,4 +1,6 @@
 (function() {
+    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Make.com Webhook URL
+
     // Create chat bubble
     let chatBubble = document.createElement("div");
     chatBubble.id = "chatbot-bubble";
@@ -81,7 +83,7 @@
     });
 
     // Handle user input
-    inputField.addEventListener("keypress", function(event) {
+    inputField.addEventListener("keypress", async function(event) {
         if (event.key === "Enter") {
             let message = inputField.value;
             inputField.value = "";
@@ -91,20 +93,30 @@
             userMessage.textContent = "User: " + message;
             chatArea.appendChild(userMessage);
 
-            // Simulated bot response
+            // Send message to Make.com Webhook and get response
+            let botResponse = await sendToWebhook(message);
+
+            // Display bot response
             let botMessage = document.createElement("div");
-            botMessage.textContent = "Bot: " + getBotResponse(message);
-            setTimeout(() => chatArea.appendChild(botMessage), 1000);
+            botMessage.textContent = "Bot: " + botResponse;
+            chatArea.appendChild(botMessage);
         }
     });
 
-    // Simulated chatbot responses
-    function getBotResponse(input) {
-        let responses = {
-            "hello": "Hi there! How can I help?",
-            "how are you": "I'm just a bot, but I'm doing great!",
-            "bye": "Goodbye! Have a nice day!",
-        };
-        return responses[input.toLowerCase()] || "I'm not sure how to respond to that.";
+    // Function to send message to Make.com Webhook
+    async function sendToWebhook(message) {
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: message })
+            });
+
+            const data = await response.json();
+            return data.response || "I didn't understand that.";
+        } catch (error) {
+            console.error("Error sending message:", error);
+            return "Error: Unable to connect to chatbot.";
+        }
     }
 })();
