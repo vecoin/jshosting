@@ -1,5 +1,5 @@
 (function() {
-    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Make.com Webhook URL
+    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Your Make.com webhook
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -85,13 +85,15 @@
     // Handle user input
     inputField.addEventListener("keypress", async function(event) {
         if (event.key === "Enter") {
-            let message = inputField.value;
+            let message = inputField.value.trim();
+            if (!message) return;
             inputField.value = "";
 
             // Display user message
             let userMessage = document.createElement("div");
             userMessage.textContent = "User: " + message;
             chatArea.appendChild(userMessage);
+            chatArea.scrollTop = chatArea.scrollHeight;
 
             // Send message to Make.com Webhook and get response
             let botResponse = await sendToWebhook(message);
@@ -100,6 +102,7 @@
             let botMessage = document.createElement("div");
             botMessage.textContent = "Bot: " + botResponse;
             chatArea.appendChild(botMessage);
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
     });
 
@@ -112,7 +115,12 @@
                 body: JSON.stringify({ text: message })
             });
 
+            if (!response.ok) {
+                throw new Error("Network response was not ok.");
+            }
+
             const data = await response.json();
+            console.log("Webhook Response:", data);
             return data.response || "I didn't understand that.";
         } catch (error) {
             console.error("Error sending message:", error);
