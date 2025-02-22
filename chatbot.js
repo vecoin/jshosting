@@ -1,7 +1,7 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; 
-    const CHATBOT_NAME = "Blickbot Assitant";  
-    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpg";  
+    const CHATBOT_NAME = "Blicky";  
+    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpgg";  
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -104,18 +104,25 @@
             overflow-y: auto;
             padding: 10px;
             background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
         }
         .chat-message {
-            background: #e1ecff;
             padding: 8px;
             margin: 5px;
             border-radius: 5px;
             max-width: 80%;
+            word-wrap: break-word;
         }
         .chat-message.user {
             background: #0078ff;
             color: white;
             align-self: flex-end;
+        }
+        .chat-message.bot {
+            background: #e1ecff;
+            color: black;
+            align-self: flex-start;
         }
         #chatbot-input-wrapper {
             background: white;
@@ -155,20 +162,27 @@
             inputField.value = "";
 
             addMessage("user", message);
-            chatArea.scrollTop = chatArea.scrollHeight; // Scroll down to the last message
+            scrollToBottom();
 
             let botResponse = await sendToWebhook(message);
             addMessage("bot", botResponse);
-            chatArea.scrollTop = chatArea.scrollHeight; // Ensure auto-scrolling
+            scrollToBottom();
         }
     });
 
     // Function to add messages to chat area
     function addMessage(sender, message) {
         let messageDiv = document.createElement("div");
-        messageDiv.className = "chat-message " + (sender === "user" ? "user" : "bot");
+        messageDiv.className = "chat-message " + sender;
         messageDiv.textContent = message;
         chatArea.appendChild(messageDiv);
+    }
+
+    // Scroll to latest message
+    function scrollToBottom() {
+        setTimeout(() => {
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }, 100);
     }
 
     // Function to send message to webhook
