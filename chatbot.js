@@ -1,21 +1,27 @@
 (function() {
-    // Create the chatbot bubble
+    // Create chat bubble
     let chatBubble = document.createElement("div");
     chatBubble.id = "chatbot-bubble";
     chatBubble.innerHTML = "💬";
     document.body.appendChild(chatBubble);
 
-    // Create the chatbot container (hidden by default)
+    // Create chatbot container (hidden by default)
     let chatContainer = document.createElement("div");
     chatContainer.id = "chatbot-container";
     chatContainer.style.display = "none";
     document.body.appendChild(chatContainer);
 
-    // Create the iframe inside the chatbot container
-    let chatIframe = document.createElement("iframe");
-    chatIframe.id = "chatbot-frame";
-    chatIframe.src = "https://luciano234.github.io/jshosting/chatbot.html";  // Chatbot page
-    chatContainer.appendChild(chatIframe);
+    // Create chat area
+    let chatArea = document.createElement("div");
+    chatArea.id = "chatbot-area";
+    chatContainer.appendChild(chatArea);
+
+    // Create input field
+    let inputField = document.createElement("input");
+    inputField.id = "chatbot-input";
+    inputField.type = "text";
+    inputField.placeholder = "Type a message...";
+    chatContainer.appendChild(inputField);
 
     // Apply styles
     let style = document.createElement("style");
@@ -46,12 +52,25 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             display: none;
-            overflow: hidden;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
-        #chatbot-frame {
+        #chatbot-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        #chatbot-input {
             width: 100%;
-            height: 100%;
-            border: none;
+            padding: 5px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     `;
     document.head.appendChild(style);
@@ -60,4 +79,32 @@
     chatBubble.addEventListener("click", function() {
         chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
     });
+
+    // Handle user input
+    inputField.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            let message = inputField.value;
+            inputField.value = "";
+
+            // Display user message
+            let userMessage = document.createElement("div");
+            userMessage.textContent = "User: " + message;
+            chatArea.appendChild(userMessage);
+
+            // Simulated bot response
+            let botMessage = document.createElement("div");
+            botMessage.textContent = "Bot: " + getBotResponse(message);
+            setTimeout(() => chatArea.appendChild(botMessage), 1000);
+        }
+    });
+
+    // Simulated chatbot responses
+    function getBotResponse(input) {
+        let responses = {
+            "hello": "Hi there! How can I help?",
+            "how are you": "I'm just a bot, but I'm doing great!",
+            "bye": "Goodbye! Have a nice day!",
+        };
+        return responses[input.toLowerCase()] || "I'm not sure how to respond to that.";
+    }
 })();
