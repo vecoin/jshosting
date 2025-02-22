@@ -1,7 +1,7 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Make.com Webhook URL
-    const CHATBOT_NAME = "Blickbot Assitant";  // <-- Change Chatbot Name Here
-    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpg";  // <-- Change Avatar URL Here
+    const CHATBOT_NAME = "My AI Assistant";  // <-- Change Chatbot Name Here
+    const AVATAR_URL = "https://example.com/avatar.png";  // <-- Change Avatar URL Here
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -68,7 +68,6 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             display: none;
-            padding: 10px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -96,15 +95,18 @@
             padding: 10px;
             background: #f9f9f9;
             border-radius: 5px;
+            display: flex;
+            flex-direction: column;
         }
         #chatbot-input-wrapper {
             padding: 10px;
             background: white;
             border-top: 1px solid #ddd;
+            display: flex;
         }
         #chatbot-input {
-            width: 100%;
-            padding: 5px;
+            flex: 1;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -114,6 +116,7 @@
     // Toggle chatbot visibility when clicking the bubble
     chatBubble.addEventListener("click", function() {
         chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
+        inputField.focus();  // Auto-focus input when opening
     });
 
     // Handle user input
@@ -124,25 +127,28 @@
             inputField.value = "";
 
             // Display user message
-            let userMessage = document.createElement("div");
-            userMessage.textContent = "User: " + message;
-            chatArea.appendChild(userMessage);
-            chatArea.scrollTop = chatArea.scrollHeight;
+            addMessage("User", message);
 
             // Send message to Make.com Webhook and get response
             let botResponse = await sendToWebhook(message);
 
             // Display bot response
-            let botMessage = document.createElement("div");
-            botMessage.textContent = CHATBOT_NAME + ": " + botResponse;
-            chatArea.appendChild(botMessage);
-            chatArea.scrollTop = chatArea.scrollHeight;
+            addMessage(CHATBOT_NAME, botResponse);
         }
     });
 
+    // Function to add messages to chat area and scroll
+    function addMessage(sender, message) {
+        let messageDiv = document.createElement("div");
+        messageDiv.className = "chat-message";
+        messageDiv.textContent = sender + ": " + message;
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;  // Auto-scroll to latest message
+    }
+
     // Function to send message to Make.com Webhook
     async function sendToWebhook(message) {
-        console.log("Sending message to webhook:", message); // Debugging log
+        console.log("Sending message to webhook:", message);
 
         try {
             const response = await fetch(WEBHOOK_URL, {
@@ -151,16 +157,15 @@
                 body: JSON.stringify({ text: message })
             });
 
-            console.log("HTTP Status:", response.status); // Log status code
+            console.log("HTTP Status:", response.status);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log("Webhook Full Response:", data); // Debugging log
+            console.log("Webhook Full Response:", data);
 
-            // Check if webhook response contains "response" field
             if (data && data.response) {
                 return data.response;
             } else {
@@ -172,3 +177,4 @@
         }
     }
 })();
+
