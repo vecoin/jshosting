@@ -1,5 +1,7 @@
 (function() {
-    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Your Make.com Webhook URL
+    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Make.com Webhook URL
+    const CHATBOT_NAME = "Blickbot Assitant";  // <-- Change Chatbot Name Here
+    const AVATAR_URL = "https://example.com/avatar.png";  // <-- Change Avatar URL Here
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -13,17 +15,29 @@
     chatContainer.style.display = "none";
     document.body.appendChild(chatContainer);
 
+    // Create chatbot header
+    let chatHeader = document.createElement("div");
+    chatHeader.id = "chatbot-header";
+    chatHeader.innerHTML = `
+        <img src="${AVATAR_URL}" id="chatbot-avatar">
+        <span>${CHATBOT_NAME}</span>
+    `;
+    chatContainer.appendChild(chatHeader);
+
     // Create chat area
     let chatArea = document.createElement("div");
     chatArea.id = "chatbot-area";
     chatContainer.appendChild(chatArea);
 
-    // Create input field
+    // Create input field (fixed at bottom)
+    let inputWrapper = document.createElement("div");
+    inputWrapper.id = "chatbot-input-wrapper";
     let inputField = document.createElement("input");
     inputField.id = "chatbot-input";
     inputField.type = "text";
     inputField.placeholder = "Type a message...";
-    chatContainer.appendChild(inputField);
+    inputWrapper.appendChild(inputField);
+    chatContainer.appendChild(inputWrapper);
 
     // Apply styles
     let style = document.createElement("style");
@@ -55,22 +69,42 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             display: none;
             padding: 10px;
-            overflow-y: auto;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
+        }
+        #chatbot-header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #0078ff;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        #chatbot-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
         #chatbot-area {
             flex-grow: 1;
             overflow-y: auto;
             padding: 10px;
-            border: 1px solid #ccc;
             background: #f9f9f9;
             border-radius: 5px;
+        }
+        #chatbot-input-wrapper {
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #ddd;
         }
         #chatbot-input {
             width: 100%;
             padding: 5px;
-            margin-top: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -100,7 +134,7 @@
 
             // Display bot response
             let botMessage = document.createElement("div");
-            botMessage.textContent = "Bot: " + botResponse;
+            botMessage.textContent = CHATBOT_NAME + ": " + botResponse;
             chatArea.appendChild(botMessage);
             chatArea.scrollTop = chatArea.scrollHeight;
         }
