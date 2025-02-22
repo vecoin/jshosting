@@ -60,16 +60,24 @@
             flex-grow: 1;
             padding: 10px;
             overflow-y: auto;
+            max-height: 320px;
+        }
+
+        /* Chat Input Container */
+        #chat-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #007bff;
         }
 
         /* Chat Input */
         #chat-input {
-            width: calc(100% - 20px);
+            flex-grow: 1;
             padding: 8px;
-            margin: 10px;
             border: 1px solid #007bff;
             border-radius: 5px;
             outline: none;
+            width: calc(100% - 20px);
         }
     </style>
 </head>
@@ -82,7 +90,9 @@
     <div id="chat-container">
         <div id="chat-header">Chatbot</div>
         <div id="chat-messages"></div>
-        <input type="text" id="chat-input" placeholder="Type a message...">
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+        </div>
     </div>
 
     <script>
