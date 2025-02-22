@@ -9,10 +9,47 @@
         body {
             font-family: Arial, sans-serif;
         }
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        #chatbot-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: blue;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Welcome to Our Website</h1>
     <p>Interact with our chatbot by clicking the chat bubble in the lower right corner.</p>
+    
+    <div id="chatbot-bubble">💬</div>
+    <div id="chatbot-container"></div>
+    
+    <script>
+        document.getElementById('chatbot-bubble').addEventListener('click', function() {
+            var chatbot = document.getElementById('chatbot-container');
+            chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>
+
