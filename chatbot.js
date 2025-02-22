@@ -1,7 +1,7 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; 
-    const CHATBOT_NAME = "My AI Assistant";  
-    const AVATAR_URL = "https://example.com/avatar.png";  
+    const CHATBOT_NAME = "Blickbot Assitant";  
+    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpg";  
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -21,10 +21,11 @@
     chatHeader.innerHTML = `
         <img src="${AVATAR_URL}" id="chatbot-avatar">
         <span>${CHATBOT_NAME}</span>
+        <button id="close-chatbot">✖</button>
     `;
     chatContainer.appendChild(chatHeader);
 
-    // Create chat area
+    // Create chat area (scrollable)
     let chatArea = document.createElement("div");
     chatArea.id = "chatbot-area";
     chatContainer.appendChild(chatArea);
@@ -64,13 +65,14 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 300px;
-            height: 400px;
+            width: 320px;
+            height: 450px;
             background: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         #chatbot-header {
             display: flex;
@@ -82,6 +84,7 @@
             font-size: 16px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            justify-content: space-between;
         }
         #chatbot-avatar {
             width: 30px;
@@ -89,18 +92,37 @@
             border-radius: 50%;
             margin-right: 10px;
         }
+        #close-chatbot {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
         #chatbot-area {
             flex-grow: 1;
             overflow-y: auto;
             padding: 10px;
             background: #f9f9f9;
         }
+        .chat-message {
+            background: #e1ecff;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .chat-message.user {
+            background: #0078ff;
+            color: white;
+            align-self: flex-end;
+        }
         #chatbot-input-wrapper {
             background: white;
             border-top: 1px solid #ddd;
             padding: 10px;
             display: flex;
-            position: sticky;
+            position: relative;
             bottom: 0;
             width: 100%;
             box-sizing: border-box;
@@ -110,14 +132,19 @@
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            outline: none;
         }
     `;
     document.head.appendChild(style);
 
-    // Toggle chatbot visibility when clicking the bubble
+    // Toggle chatbot visibility
     chatBubble.addEventListener("click", function() {
-        chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
+        chatContainer.style.display = "block";
         inputField.focus();
+    });
+
+    document.getElementById('close-chatbot').addEventListener("click", function() {
+        chatContainer.style.display = "none";
     });
 
     // Handle user input
@@ -127,19 +154,21 @@
             if (!message) return;
             inputField.value = "";
 
-            addMessage("User", message);
+            addMessage("user", message);
+            chatArea.scrollTop = chatArea.scrollHeight; // Scroll down to the last message
+
             let botResponse = await sendToWebhook(message);
-            addMessage(CHATBOT_NAME, botResponse);
+            addMessage("bot", botResponse);
+            chatArea.scrollTop = chatArea.scrollHeight; // Ensure auto-scrolling
         }
     });
 
     // Function to add messages to chat area
     function addMessage(sender, message) {
         let messageDiv = document.createElement("div");
-        messageDiv.className = "chat-message";
-        messageDiv.textContent = sender + ": " + message;
+        messageDiv.className = "chat-message " + (sender === "user" ? "user" : "bot");
+        messageDiv.textContent = message;
         chatArea.appendChild(messageDiv);
-        chatArea.scrollTop = chatArea.scrollHeight; 
     }
 
     // Function to send message to webhook
