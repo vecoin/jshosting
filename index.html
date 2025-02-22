@@ -1,62 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>Chatbot GPT</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        #chatbox {
-            flex-grow: 1;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            background: #f9f9f9;
-        }
-        #chat-input {
-            width: 100%;
-            padding: 5px;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #chatbox { width: 90%; max-width: 400px; height: 500px; border: 1px solid #ccc; overflow-y: auto; padding: 10px; margin: auto; }
+        input, button { width: 90%; padding: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
+
+    <h2>Chatbot GPT</h2>
     <div id="chatbox"></div>
-    <input type="text" id="chat-input" placeholder="Type a message...">
+    <input type="text" id="userInput" placeholder="Escribe tu mensaje...">
+    <button onclick="sendMessage()">Enviar</button>
 
-    <script>
-        let chatbox = document.getElementById("chatbox");
-        let inputField = document.getElementById("chat-input");
+<script src="https://luciano234.github.io/jshosting/chatbot.js" defer></script>
 
-        inputField.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                let message = inputField.value;
-                inputField.value = "";
 
-                let userMessage = document.createElement("div");
-                userMessage.textContent = "User: " + message;
-                chatbox.appendChild(userMessage);
-            }
-        });
-
-        // Receive messages from the main page
-        window.addEventListener("message", function(event) {
-            if (event.data.text) {
-                let botMessage = document.createElement("div");
-                botMessage.textContent = "Bot: " + event.data.text;
-                chatbox.appendChild(botMessage);
-            }
-        }, false);
-    </script>
 </body>
-</html>
