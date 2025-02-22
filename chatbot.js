@@ -1,7 +1,7 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Make.com Webhook URL
     const CHATBOT_NAME = "Blickbot Assitant";  // <-- Change Chatbot Name Here
-    const AVATAR_URL = "https://example.com/avatar.png";  // <-- Change Avatar URL Here
+    const AVATAR_URL = "https://luciano234.github.io/jshosting/logo_v3_blickbot.jpg";  // <-- Change Avatar URL Here
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
