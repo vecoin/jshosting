@@ -44,6 +44,11 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        #chatbot-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -52,7 +57,7 @@
     
     <div id="chatbot-bubble">💬</div>
     <div id="chatbot-container">
-        <div id="chatbot-messages"></div>
+        <iframe id="chatbot-frame" src="https://luciano234.github.io/jshosting/chatbot2.html"></iframe>
         <input type="text" id="chatbot-input" placeholder="Type a message...">
     </div>
     
@@ -64,19 +69,23 @@
 
         document.getElementById('chatbot-input').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                var input = document.getElementById('chatbot-input');
-                var message = input.value.trim();
-                if (message !== "") {
-                    var chatMessages = document.getElementById('chatbot-messages');
-                    var newMessage = document.createElement('div');
-                    newMessage.textContent = message;
-                    chatMessages.appendChild(newMessage);
-                    input.value = "";
+                var message = this.value;
+                this.value = "";
+
+                var iframe = document.getElementById('chatbot-frame');
+                if (iframe) {
+                    iframe.contentWindow.postMessage({ text: message }, "*");
                 }
             }
         });
+
+        // Listen for chatbot responses
+        window.addEventListener("message", function(event) {
+            var chatbotFrame = document.getElementById("chatbot-frame");
+            if (chatbotFrame && event.data.text) {
+                console.log("Received from chatbot:", event.data.text);
+            }
+        }, false);
     </script>
 </body>
 </html>
-
-
