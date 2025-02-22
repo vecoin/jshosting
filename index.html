@@ -11,7 +11,7 @@
         }
         #chatbot-container {
             position: fixed;
-            bottom: 20px;
+            bottom: 80px;
             right: 20px;
             width: 300px;
             height: 400px;
@@ -19,6 +19,8 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             display: none;
+            padding: 10px;
+            overflow-y: auto;
         }
         #chatbot-bubble {
             position: fixed;
@@ -35,6 +37,13 @@
             font-size: 20px;
             cursor: pointer;
         }
+        #chatbot-input {
+            width: 100%;
+            padding: 5px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -42,14 +51,32 @@
     <p>Interact with our chatbot by clicking the chat bubble in the lower right corner.</p>
     
     <div id="chatbot-bubble">💬</div>
-    <div id="chatbot-container"></div>
+    <div id="chatbot-container">
+        <div id="chatbot-messages"></div>
+        <input type="text" id="chatbot-input" placeholder="Type a message...">
+    </div>
     
     <script>
         document.getElementById('chatbot-bubble').addEventListener('click', function() {
             var chatbot = document.getElementById('chatbot-container');
             chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
         });
+
+        document.getElementById('chatbot-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                var input = document.getElementById('chatbot-input');
+                var message = input.value.trim();
+                if (message !== "") {
+                    var chatMessages = document.getElementById('chatbot-messages');
+                    var newMessage = document.createElement('div');
+                    newMessage.textContent = message;
+                    chatMessages.appendChild(newMessage);
+                    input.value = "";
+                }
+            }
+        });
     </script>
 </body>
 </html>
+
 
