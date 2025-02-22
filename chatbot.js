@@ -97,12 +97,17 @@
             border-radius: 5px;
             display: flex;
             flex-direction: column;
+            max-height: 320px; /* Ensuring space for input field */
         }
         #chatbot-input-wrapper {
             padding: 10px;
             background: white;
             border-top: 1px solid #ddd;
             display: flex;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
         #chatbot-input {
             flex: 1;
@@ -177,4 +182,3 @@
         }
     }
 })();
-
