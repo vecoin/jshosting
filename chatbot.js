@@ -1,5 +1,5 @@
 (function() {
-    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Your Make.com webhook
+    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Your Make.com Webhook URL
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -108,6 +108,8 @@
 
     // Function to send message to Make.com Webhook
     async function sendToWebhook(message) {
+        console.log("Sending message to webhook:", message); // Debugging log
+
         try {
             const response = await fetch(WEBHOOK_URL, {
                 method: "POST",
@@ -115,13 +117,21 @@
                 body: JSON.stringify({ text: message })
             });
 
+            console.log("HTTP Status:", response.status); // Log status code
+
             if (!response.ok) {
-                throw new Error("Network response was not ok.");
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log("Webhook Response:", data);
-            return data.response || "I didn't understand that.";
+            console.log("Webhook Full Response:", data); // Debugging log
+
+            // Check if webhook response contains "response" field
+            if (data && data.response) {
+                return data.response;
+            } else {
+                return "Error: Webhook did not return a valid response.";
+            }
         } catch (error) {
             console.error("Error sending message:", error);
             return "Error: Unable to connect to chatbot.";
