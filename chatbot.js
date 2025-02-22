@@ -1,7 +1,7 @@
 (function() {
-    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; // Make.com Webhook URL
-    const CHATBOT_NAME = "My AI Assistant";  // <-- Change Chatbot Name Here
-    const AVATAR_URL = "https://example.com/avatar.png";  // <-- Change Avatar URL Here
+    const WEBHOOK_URL = "https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah"; 
+    const CHATBOT_NAME = "My AI Assistant";  
+    const AVATAR_URL = "https://example.com/avatar.png";  
 
     // Create chat bubble
     let chatBubble = document.createElement("div");
@@ -9,7 +9,7 @@
     chatBubble.innerHTML = "💬";
     document.body.appendChild(chatBubble);
 
-    // Create chatbot container (hidden by default)
+    // Create chatbot container
     let chatContainer = document.createElement("div");
     chatContainer.id = "chatbot-container";
     chatContainer.style.display = "none";
@@ -29,13 +29,15 @@
     chatArea.id = "chatbot-area";
     chatContainer.appendChild(chatArea);
 
-    // Create input field (fixed at bottom)
+    // Create input wrapper (fixed at bottom)
     let inputWrapper = document.createElement("div");
     inputWrapper.id = "chatbot-input-wrapper";
+    
     let inputField = document.createElement("input");
     inputField.id = "chatbot-input";
     inputField.type = "text";
     inputField.placeholder = "Type a message...";
+    
     inputWrapper.appendChild(inputField);
     chatContainer.appendChild(inputWrapper);
 
@@ -60,15 +62,13 @@
         }
         #chatbot-container {
             position: fixed;
-            bottom: 80px;
+            bottom: 20px;
             right: 20px;
             width: 300px;
             height: 400px;
             background: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
@@ -94,17 +94,13 @@
             overflow-y: auto;
             padding: 10px;
             background: #f9f9f9;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            max-height: 320px; /* Ensuring space for input field */
         }
         #chatbot-input-wrapper {
-            padding: 10px;
             background: white;
             border-top: 1px solid #ddd;
+            padding: 10px;
             display: flex;
-            position: absolute;
+            position: sticky;
             bottom: 0;
             width: 100%;
             box-sizing: border-box;
@@ -121,7 +117,7 @@
     // Toggle chatbot visibility when clicking the bubble
     chatBubble.addEventListener("click", function() {
         chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
-        inputField.focus();  // Auto-focus input when opening
+        inputField.focus();
     });
 
     // Handle user input
@@ -131,30 +127,23 @@
             if (!message) return;
             inputField.value = "";
 
-            // Display user message
             addMessage("User", message);
-
-            // Send message to Make.com Webhook and get response
             let botResponse = await sendToWebhook(message);
-
-            // Display bot response
             addMessage(CHATBOT_NAME, botResponse);
         }
     });
 
-    // Function to add messages to chat area and scroll
+    // Function to add messages to chat area
     function addMessage(sender, message) {
         let messageDiv = document.createElement("div");
         messageDiv.className = "chat-message";
         messageDiv.textContent = sender + ": " + message;
         chatArea.appendChild(messageDiv);
-        chatArea.scrollTop = chatArea.scrollHeight;  // Auto-scroll to latest message
+        chatArea.scrollTop = chatArea.scrollHeight; 
     }
 
-    // Function to send message to Make.com Webhook
+    // Function to send message to webhook
     async function sendToWebhook(message) {
-        console.log("Sending message to webhook:", message);
-
         try {
             const response = await fetch(WEBHOOK_URL, {
                 method: "POST",
@@ -162,23 +151,13 @@
                 body: JSON.stringify({ text: message })
             });
 
-            console.log("HTTP Status:", response.status);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const data = await response.json();
-            console.log("Webhook Full Response:", data);
-
-            if (data && data.response) {
-                return data.response;
-            } else {
-                return "Error: Webhook did not return a valid response.";
-            }
+            return data.response || "No response from bot.";
         } catch (error) {
-            console.error("Error sending message:", error);
-            return "Error: Unable to connect to chatbot.";
+            console.error("Error:", error);
+            return "Error: Unable to connect.";
         }
     }
 })();
