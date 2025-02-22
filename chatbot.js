@@ -1,46 +1,63 @@
-function startChatbot() {
-    console.log("Chatbot initialized...");
+(function() {
+    // Create the chatbot bubble
+    let chatBubble = document.createElement("div");
+    chatBubble.id = "chatbot-bubble";
+    chatBubble.innerHTML = "💬";
+    document.body.appendChild(chatBubble);
 
-    // Function to send messages to Make.com Webhook
-    async function sendMessage(message) {
-        console.log("User:", message);
+    // Create the chatbot container (hidden by default)
+    let chatContainer = document.createElement("div");
+    chatContainer.id = "chatbot-container";
+    chatContainer.style.display = "none";
+    document.body.appendChild(chatContainer);
 
-        try {
-            const response = await fetch("https://hook.us1.make.com/7obx2jgtkfdp6i36mx78yamsguub13ah", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ text: message })
-            });
+    // Create the iframe inside the chatbot container
+    let chatIframe = document.createElement("iframe");
+    chatIframe.id = "chatbot-frame";
+    chatIframe.src = "https://luciano234.github.io/jshosting/chatbot.html";  // Chatbot page
+    chatContainer.appendChild(chatIframe);
 
-            const data = await response.json();
-            console.log("Make.com Response:", data);
-            
-            // Display response in chatbot iframe
-            const chatbotFrame = document.getElementById("chatbot-frame");
-            if (chatbotFrame) {
-                chatbotFrame.contentWindow.postMessage(data, "*");
-            }
-        } catch (error) {
-            console.error("Error sending message:", error);
+    // Apply styles
+    let style = document.createElement("style");
+    style.innerHTML = `
+        #chatbot-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: blue;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-    }
-
-    // Attach event listener to chatbot input
-    document.addEventListener("DOMContentLoaded", function () {
-        const inputField = document.getElementById("chatbot-input");
-        if (inputField) {
-            inputField.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    sendMessage(inputField.value);
-                    inputField.value = ""; // Clear input after sending
-                }
-            });
+        #chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            overflow: hidden;
         }
+        #chatbot-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Toggle chatbot visibility when clicking the bubble
+    chatBubble.addEventListener("click", function() {
+        chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
     });
-
-    return { sendMessage };
-}
-
-const chatbot = startChatbot();
+})();
