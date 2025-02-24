@@ -1,6 +1,6 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us2.make.com/t3s5injva3oyrolkrpcwn459wwarcyhu"; 
-    const CHATBOT_NAME = "Blickbot Francisco 3";  
+    const CHATBOT_NAME = "Blickbot Francisco 4";  
     const AVATAR_URL = "https://vecoin.github.io/jshosting/logo_v3_blickbot.jpg";  
 
     // Create chat bubble
