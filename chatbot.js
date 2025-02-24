@@ -1,6 +1,6 @@
 (function() {
     const WEBHOOK_URL = "https://hook.us2.make.com/t3s5injva3oyrolkrpcwn459wwarcyhu";
-    const CHATBOT_NAME = "Blickbot Francisco 2";  
+    const CHATBOT_NAME = "Blickbot Francisco 3";  
     const AVATAR_URL = "https://vecoin.github.io/jshosting/logo_v3_blickbot.jpg";  
 
     // Create chat bubble
@@ -189,7 +189,7 @@
     }
 
     // Function to send message to webhook
-   async function sendToWebhook(message) {
+  async function sendToWebhook(message) {
     try {
         const response = await fetch(WEBHOOK_URL, {
             method: "POST",
@@ -204,11 +204,12 @@
         const data = await response.json();
         console.log("Parsed JSON response:", data);
 
-        return data.response || "No response from bot.";
+        return typeof data === "string" ? data : data.response || "No response from bot.";
     } catch (error) {
         console.error("Error:", error);
         return "Error: Unable to connect.";
     }
 }
+
 
 })();
