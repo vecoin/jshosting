@@ -189,21 +189,26 @@
     }
 
     // Function to send message to webhook
-    async function sendToWebhook(message) {
-        try {
-            const response = await fetch(WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: message })
-            });
+   async function sendToWebhook(message) {
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: message })
+        });
 
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        console.log("Raw response:", response);
 
-            const data = await response.json();
-            return data.response || "No response from bot.";
-        } catch (error) {
-            console.error("Error:", error);
-            return "Error: Unable to connect.";
-        }
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const data = await response.json();
+        console.log("Parsed JSON response:", data);
+
+        return data.response || "No response from bot.";
+    } catch (error) {
+        console.error("Error:", error);
+        return "Error: Unable to connect.";
     }
+}
+
 })();
