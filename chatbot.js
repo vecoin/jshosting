@@ -189,7 +189,7 @@
     }
 
     // Function to send message to webhook
-  async function sendToWebhook(message) {
+ async function sendToWebhook(message) {
     try {
         const response = await fetch(WEBHOOK_URL, {
             method: "POST",
@@ -204,12 +204,11 @@
         const data = await response.json();
         console.log("Parsed JSON response:", data);
 
-        return typeof data === "string" ? data : data.response || "No response from bot.";
+        return data.Response || data.response || "No response from bot."; // Handle capital "Response"
     } catch (error) {
         console.error("Error:", error);
         return "Error: Unable to connect.";
     }
 }
-
 
 })();
