@@ -1,5 +1,5 @@
 (function() {
-    const WEBHOOK_URL = "https://hook.us2.make.com/t3s5injva3oyrolkrpcwn459wwarcyhu"; 
+    const WEBHOOK_URL = "https://hook.us2.make.com/5q4x9ziw5dm9vaio8tf5wp6qtyr92kge; 
     const CHATBOT_NAME = "Blickbot Francisco 4";  
     const AVATAR_URL = "https://vecoin.github.io/jshosting/logo_v3_blickbot.jpg";  
 
